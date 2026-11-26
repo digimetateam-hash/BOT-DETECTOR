@@ -1,6 +1,7 @@
 """
 Dashboard Antarmuka Aplikasi Pendeteksi Bot Media Sosial
 Berdasarkan PRD Aplikasi Pendeteksi Bot Media Sosial (Bagian 14a)
+Dengan Desain Material 3 & Aset 3D
 """
 import json
 import os
@@ -32,46 +33,95 @@ from pipeline.network.graph import (
 
 # Konfigurasi Halaman Streamlit
 st.set_page_config(
-    page_title="Deteksi Bot & Jaringan Terkoordinasi",
+    page_title="Deteksi Bot & Jaringan Terkoordinasi | Material 3",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# Custom Styling
+# Material Design 3 Custom CSS
 st.markdown("""
 <style>
+    /* Google Material 3 Design Tokens */
+    :root {
+        --md-sys-color-primary: #0061A4;
+        --md-sys-color-primary-container: #D1E4FF;
+        --md-sys-color-on-primary-container: #001D36;
+        --md-sys-color-surface: #F8F9FA;
+        --md-sys-color-surface-container: #EEF2F6;
+        --md-sys-color-surface-container-high: #E6ECF2;
+        --md-sys-color-outline-variant: #C2C7CF;
+    }
+
+    .m3-hero-card {
+        background: linear-gradient(135deg, #0B132B 0%, #1C2541 60%, #0061A4 100%);
+        border-radius: 28px;
+        padding: 36px 40px;
+        color: #FFFFFF;
+        box-shadow: 0 12px 32px rgba(0, 97, 164, 0.15);
+        margin-bottom: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .m3-hero-title {
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        margin-bottom: 12px;
+        color: #FFFFFF;
+    }
+    .m3-hero-desc {
+        font-size: 16px;
+        color: #D1E4FF;
+        line-height: 1.6;
+        max-width: 680px;
+        margin-bottom: 20px;
+    }
+    .m3-badge {
+        display: inline-block;
+        background-color: rgba(255, 255, 255, 0.15);
+        color: #FFFFFF;
+        padding: 6px 14px;
+        border-radius: 100px;
+        font-size: 13px;
+        font-weight: 600;
+        backdrop-filter: blur(8px);
+        margin-right: 8px;
+        margin-bottom: 8px;
+    }
+    .m3-card {
+        background: #FFFFFF;
+        border-radius: 20px;
+        padding: 24px;
+        border: 1px solid #E2E8F0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        height: 100%;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .m3-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 97, 164, 0.08);
+    }
+    .m3-card-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #0F172A;
+        margin-bottom: 8px;
+    }
+    .m3-card-desc {
+        font-size: 14px;
+        color: #64748B;
+        line-height: 1.5;
+    }
     .main-header {
         font-size: 26px;
         font-weight: 700;
-        color: #1E3A8A;
+        color: #0061A4;
         margin-bottom: 2px;
     }
     .sub-header {
         font-size: 14px;
         color: #6B7280;
         margin-bottom: 18px;
-    }
-    .badge-bot {
-        background-color: #FEE2E2;
-        color: #991B1B;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-weight: 600;
-    }
-    .badge-suspicious {
-        background-color: #FEF3C7;
-        color: #92400E;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-weight: 600;
-    }
-    .badge-organic {
-        background-color: #D1FAE5;
-        color: #065F46;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-weight: 600;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -87,7 +137,7 @@ if "clusters" not in st.session_state:
 if "duplicates" not in st.session_state:
     st.session_state["duplicates"] = []
 if "manual_labels" not in st.session_state:
-    st.session_state["manual_labels"] = {}  # {user: {coder: label}}
+    st.session_state["manual_labels"] = {}
 
 
 def run_full_pipeline(df_posts: pd.DataFrame):
@@ -100,7 +150,6 @@ def run_full_pipeline(df_posts: pd.DataFrame):
 
     with st.spinner("Menghitung skor bot dan atribusi fitur SHAP..."):
         df_scores = calculate_bot_score_and_explain(df_features)
-        # Samarkan nama akun dengan SHA-256 + salt rahasia
         df_scores["handle_hash"] = df_scores["author_username"].apply(lambda u: hash_handle(u)[:16] + "...")
         df_scores["full_hash"] = df_scores["author_username"].apply(hash_handle)
 
@@ -116,13 +165,14 @@ def run_full_pipeline(df_posts: pd.DataFrame):
 
 
 # Sidebar Navigasi
-st.sidebar.image("https://img.icons8.com/color/96/shield.png", width=64)
-st.sidebar.markdown("### **Pendeteksi Bot & CIB**")
-st.sidebar.caption("Analisis Perilaku Akun & Jaringan Terkoordinasi")
+st.sidebar.image("https://img.icons8.com/color/96/shield.png", width=60)
+st.sidebar.markdown("### **Bot & CIB Detector**")
+st.sidebar.caption("Google Material 3 Edition · PRD Nov 2026")
 
 nav_choice = st.sidebar.radio(
-    "Pilih Menu / Layar:",
+    "Navigasi Modul:",
     [
+        "🏠 Beranda (Landing Page)",
         "1. 📥 Unggah Data",
         "2. 📊 Ringkasan Isu",
         "3. ⚠️ Daftar Akun Berisiko",
@@ -136,15 +186,95 @@ nav_choice = st.sidebar.radio(
 st.sidebar.markdown("---")
 st.sidebar.info("""
 **Kepatuhan Etika PRD (13b):**
-- Identitas akun disamarkan menggunakan hash kriptografis SHA-256.
-- Hasil penilaian adalah *indikasi perilaku mirip bot*, bukan vonis personal.
+- Identitas akun disamarkan menggunakan hash SHA-256 + salt.
+- Istilah hasil: *perilaku mirip bot* & *terkoordinasi*, bukan tuduhan mutlak.
 """)
+
+
+# -------------------------------------------------------------
+# BERANDA / LANDING PAGE (MATERIAL 3)
+# -------------------------------------------------------------
+if nav_choice == "🏠 Beranda (Landing Page)":
+    # Hero Section dengan Gambar 3D & Material 3 Styling
+    col_hero_text, col_hero_img = st.columns([1.1, 0.9])
+
+    with col_hero_text:
+        st.markdown("""
+        <div class="m3-hero-card">
+            <span class="m3-badge">🛡️ Material Design 3</span>
+            <span class="m3-badge">⚡ Explainable AI</span>
+            <span class="m3-badge">🕸️ Multiplex Network</span>
+            <div class="m3-hero-title">Deteksi Akun Bot & Jaringan Terkoordinasi</div>
+            <div class="m3-hero-desc">
+                Platform investigasi analisis wacana percakapan kebijakan publik Indonesia di X (Twitter).
+                Menggabungkan empat lapisan sinyal: profil akun, pola aktivitas waktu, kemiripan semantik, dan graf koordinasi multiplex.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        b1, b2 = st.columns(2)
+        with b1:
+            if st.button("🚀 Coba Dataset Simulasi MBG", type="primary", use_container_width=True):
+                mock_df = generate_mock_mbg_corpus(n_posts=350)
+                run_full_pipeline(mock_df)
+                st.success("Dataset simulasi MBG berhasil dimuat! Buka menu '2. Ringkasan Isu'.")
+        with b2:
+            st.info("Atau buka menu **1. Unggah Data** untuk file CSV / NodeXL Anda.")
+
+    with col_hero_img:
+        hero_svg_path = os.path.join(os.path.dirname(__file__), "..", "assets", "hero_3d_material3.svg")
+        if os.path.exists(hero_svg_path):
+            st.image(hero_svg_path, use_container_width=True)
+
+    st.markdown("---")
+    st.markdown("### 🌟 Arsitektur 4 Lapisan Sinyal (PRD Bagian 7)")
+
+    c1, c2, c3, c4 = st.columns(4)
+    with c1:
+        st.markdown("""
+        <div class="m3-card">
+            <div class="m3-card-title">👤 1. Lapisan Profil</div>
+            <div class="m3-card-desc">
+                Mendeteksi pola akun buzzer: rasio Following/Follower ekstrem, umur akun baru (&lt;90 hari), foto avatar bawaan, dan bio kosong.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with c2:
+        st.markdown("""
+        <div class="m3-card">
+            <div class="m3-card-title">⏱️ 2. Aktivitas Waktu</div>
+            <div class="m3-card-desc">
+                Pengukuran entropi jam aktif 24 jam dan keteraturan interval posting (burstiness) untuk membedakan manusia dari penjadwalan bot otomatis.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with c3:
+        st.markdown("""
+        <div class="m3-card">
+            <div class="m3-card-title">📝 3. Konten & Teks</div>
+            <div class="m3-card-desc">
+                Algoritma MinHash/LSH untuk copy-paste template cepat dan representasi semantik bahasa Indonesia yang tahan parafrase LLM.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with c4:
+        st.markdown("""
+        <div class="m3-card">
+            <div class="m3-card-title">🕸️ 4. Graf Multiplex</div>
+            <div class="m3-card-desc">
+                Analisis jaringan co-retweet (&le; 60 detik) dan co-hashtag menggunakan algoritma komunitas Leiden untuk memetakan klaster CIB.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
 
 # -------------------------------------------------------------
 # LAYAR 1: UNGGAH DATA
 # -------------------------------------------------------------
-if nav_choice == "1. 📥 Unggah Data":
+elif nav_choice == "1. 📥 Unggah Data":
     st.markdown('<div class="main-header">Unggah Data Korpus Baru</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-header">Mendukung berkas ekspor CSV atau Excel hasil NodeXL Pro / Scraper</div>', unsafe_allow_html=True)
 
@@ -207,7 +337,7 @@ elif nav_choice == "2. 📊 Ringkasan Isu":
         organic_count = (df_scores["kategori"] == "organik").sum()
         bot_percentage = (bot_count / total_akun) * 100 if total_akun > 0 else 0
 
-        # KPI Cards
+        # KPI Cards Material 3
         kpi1, kpi2, kpi3, kpi4 = st.columns(4)
         kpi1.metric("Total Akun Dinilai", total_akun)
         kpi2.metric("Perilaku Mirip Bot", f"{bot_count} ({bot_percentage:.1f}%)")
@@ -289,7 +419,6 @@ elif nav_choice == "3. ⚠️ Daftar Akun Berisiko":
 
         st.write(f"Menampilkan **{len(filtered)}** akun dari total {len(df_scores)} akun.")
 
-        # Menampilkan tabel dengan badge representasi
         display_df = filtered[["handle_hash", "skor", "kategori", "total_posts"]].copy()
         display_df = display_df.sort_values("skor", ascending=False).reset_index(drop=True)
         st.dataframe(display_df, use_container_width=True)
@@ -379,13 +508,11 @@ elif nav_choice == "5. 🕸️ Peta Klaster Koordinasi":
         c_info3.metric("Tingkat Risiko", selected_cluster["risk_level"])
         c_info4.metric("Lapisan Aktif", ", ".join(selected_cluster["layers"]))
 
-        # Visualisasi Graf Sederhana menggunakan Plotly
         st.write("##### Visualisasi Graf Anggota Klaster")
         G = st.session_state.get("graph")
         if G:
             subg = G.subgraph(selected_cluster["members"])
             pos = {}
-            # Layout lingkaran sederhana
             n = len(subg.nodes())
             for idx, node in enumerate(subg.nodes()):
                 angle = 2 * np.pi * idx / max(n, 1)
@@ -498,7 +625,6 @@ elif nav_choice == "6. ✍️ Validasi Manual":
             labels = st.session_state["manual_labels"]
             st.metric("Total Akun Tervalidasi", len(labels))
 
-            # Simulasi atau kalkulasi Kappa jika ada 2 coder
             coder_a_labels = ["bot", "bot", "manusia", "bot", "manusia"]
             coder_b_labels = ["bot", "bot", "manusia", "bot", "bot"]
             kappa_res = calculate_intercoder_agreement(coder_a_labels, coder_b_labels)
@@ -531,7 +657,6 @@ elif nav_choice == "7. 📑 Laporan & Ekspor":
         - **Klaster Koordinasi**: {len(st.session_state.get('clusters', [])):,} kelompok aktif
         """)
 
-        # Opsi Ekspor CSV Bersih
         export_df = df_scores[["handle_hash", "full_hash", "skor", "kategori", "total_posts", "top_features"]].copy()
         csv_data = export_df.to_csv(index=False).encode("utf-8")
 
