@@ -1,0 +1,51 @@
+[project]
+name = "deteksi-bot"
+version = "0.1.0"
+description = "Aplikasi Pendeteksi Bot dan Perilaku Tidak Autentik Terkoordinasi di Media Sosial"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "pandas",
+    "polars",
+    "numpy",
+    "openpyxl",
+    "pyarrow",
+    "emoji",
+    "Sastrawi",
+    "unidecode",
+    "scikit-learn",
+    "lightgbm",
+    "xgboost",
+    "imbalanced-learn",
+    "shap",
+    "transformers",
+    "torch",
+    "sentence-transformers",
+    "datasketch",
+    "rapidfuzz",
+    "networkx",
+    "python-igraph",
+    "leidenalg",
+    "scipy",
+    "statsmodels",
+    "krippendorff",
+    "anthropic",
+    "streamlit",
+    "plotly",
+    "pyvis",
+    "reportlab",
+    "jinja2",
+    "sqlalchemy",
+    "psycopg2-binary",
+    "python-telegram-bot",
+    "python-dotenv",
+    "datasets",
+    "huggingface_hub",
+    "pytest",
+    "ruff",
+    "pyyaml",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

@@ -1,0 +1,22 @@
+# Panduan Pengembangan & Aturan untuk AI Coding Agent (PRD Bagian 13c)
+
+- **Bahasa & Environment**: Python 3.11. Format dan lint menggunakan `ruff`. Gunakan type hint pada semua fungsi publik.
+- **Struktur Folder**:
+  - `app/`: Antarmuka dashboard Streamlit
+  - `pipeline/`:
+    - `ingest/`: Impor & parsing data (CSV/XLSX NodeXL)
+    - `features/`: Ekstraksi fitur profil, aktivitas, konten, dan jaringan
+    - `models/`: Pelatihan & inferensi model ML (LightGBM/XGBoost) + SHAP
+    - `network/`: Konstruksi graf multiplex & deteksi komunitas (Leiden/Louvain)
+  - `db/`: Skema database SQLAlchemy & migrasi
+  - `tests/`: Unit test & integration test (pytest)
+  - `data/`: Penyimpanan data lokal (diabaikan oleh Git)
+- **Rahasia & Konfigurasi**:
+  - Semua API key, salt hash, dan token Telegram hanya disimpan di `.env`. Sediakan `.env.example`.
+  - Ambang batas (thresholds) wajib dibaca dari `config.yaml`, dilarang hardcode di dalam kode sumber.
+- **Etika & Privasi**:
+  - Username asli tidak pernah disimpan langsung di database; wajib di-hash menggunakan SHA-256 + salt rahasia.
+  - Label dan output publik menggunakan istilah "perilaku mirip bot" atau "terkoordinasi", bukan vonis.
+- **Pengujian & Kualitas**:
+  - Setiap fitur baru wajib memiliki test di `tests/`.
+  - Tetapkan random seed tetap untuk reprodusibilitas (dicatat di `run_model`).

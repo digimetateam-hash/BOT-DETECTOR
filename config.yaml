@@ -1,0 +1,28 @@
+# Konfigurasi Ambang Batas Deteksi Bot & Koordinasi (PRD Bagian 13a)
+detection:
+  score_thresholds:
+    organik_max: 0.40
+    mencurigakan_min: 0.40
+    mencurigakan_max: 0.69
+    mirip_bot_min: 0.70 # R-D1
+  min_posts_for_categorization: 5 # R-D2
+  co_retweet:
+    window_seconds: 60 # R-D3
+    min_co_occurrences: 3 # R-D3
+  text_similarity:
+    minhash_jaccard_threshold: 0.85 # R-D4
+    indobert_cosine_threshold: 0.90 # R-D5
+    indobert_window_minutes: 10 # R-D5
+  cluster:
+    min_accounts: 5 # R-D6
+    multi_layer_high_threshold: 2 # R-D7: minimal muncul di 2 dari 4 lapisan
+  fandom_mitigation:
+    median_account_age_years: 2.0 # R-D8
+    high_reciprocal_interactions: true
+  explainability:
+    top_shap_features: 5 # R-D9
+
+app:
+  name: "Pendeteksi Bot Media Sosial"
+  version: "0.1.0"
+  default_database: "sqlite:///bot_detection.db"
