@@ -33,8 +33,8 @@ from pipeline.network.graph import (
 
 # Konfigurasi Halaman Streamlit
 st.set_page_config(
-    page_title="Deteksi Bot & Jaringan Terkoordinasi | Material 3",
-    page_icon="🛡️",
+    page_title="🎭 TOPENG | Twitter Observer for Pseudo-ENGagement",
+    page_icon="🎭",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -166,8 +166,8 @@ def run_full_pipeline(df_posts: pd.DataFrame):
 
 # Sidebar Navigasi
 st.sidebar.image("https://img.icons8.com/color/96/shield.png", width=60)
-st.sidebar.markdown("### **Bot & CIB Detector**")
-st.sidebar.caption("Google Material 3 Edition · PRD Nov 2026")
+st.sidebar.markdown("### 🎭 **TOPENG**")
+st.sidebar.caption("Twitter Observer for Pseudo-ENGagement")
 
 nav_choice = st.sidebar.radio(
     "Navigasi Modul:",
@@ -201,13 +201,15 @@ if nav_choice == "🏠 Beranda (Landing Page)":
     with col_hero_text:
         st.markdown("""
         <div class="m3-hero-card">
+            <span class="m3-badge">🎭 TOPENG</span>
+            <span class="m3-badge">Twitter Observer for Pseudo-ENGagement</span>
             <span class="m3-badge">🛡️ Material Design 3</span>
-            <span class="m3-badge">⚡ Explainable AI</span>
-            <span class="m3-badge">🕸️ Multiplex Network</span>
-            <div class="m3-hero-title">Deteksi Akun Bot & Jaringan Terkoordinasi</div>
+            <div class="m3-hero-title">Seribu akun, berapa yang punya wajah?</div>
             <div class="m3-hero-desc">
-                Platform investigasi analisis wacana percakapan kebijakan publik Indonesia di X (Twitter).
-                Menggabungkan empat lapisan sinyal: profil akun, pola aktivitas waktu, kemiripan semantik, dan graf koordinasi multiplex.
+                Sebuah tagar meledak dalam semalam. Ribuan akun ikut bersuara, ramai, kompak, meyakinkan.<br>
+                Tapi ramai belum tentu nyata. Sebagian adalah orang. Sebagian lagi hanya topeng.<br><br>
+                <b>TOPENG</b> mengamati pola di balik keramaian itu, agar kita bisa bertanya: <i>siapa yang benar-benar bicara?</i><br><br>
+                <span style="font-size: 19px; font-weight: 800; color: #FFFFFF; letter-spacing: 0.5px;">Buka topengnya. Baca polanya.</span>
             </div>
         </div>
         """, unsafe_allow_html=True)

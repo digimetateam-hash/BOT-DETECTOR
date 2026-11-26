@@ -2,21 +2,21 @@
   <defs>
     <!-- M3 Gradients -->
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0B132B" />
-      <stop offset="50%" stop-color="#1C2541" />
-      <stop offset="100%" stop-color="#0B132B" />
-    </linearGradient>
-
-    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3873C4" />
-      <stop offset="50%" stop-color="#0061A4" />
-      <stop offset="100%" stop-color="#00477B" />
+      <stop offset="0%" stop-color="#080E1E" />
+      <stop offset="50%" stop-color="#141E33" />
+      <stop offset="100%" stop-color="#080E1E" />
     </linearGradient>
 
     <linearGradient id="shieldGrad" x1="20%" y1="0%" x2="80%" y2="100%">
-      <stop offset="0%" stop-color="#55A5FF" stop-opacity="0.9" />
-      <stop offset="40%" stop-color="#0061A4" stop-opacity="0.7" />
+      <stop offset="0%" stop-color="#55A5FF" stop-opacity="0.95" />
+      <stop offset="40%" stop-color="#0061A4" stop-opacity="0.75" />
       <stop offset="100%" stop-color="#002D57" stop-opacity="0.95" />
+    </linearGradient>
+
+    <linearGradient id="maskGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E2E8F0" />
+      <stop offset="50%" stop-color="#94A3B8" />
+      <stop offset="100%" stop-color="#475569" />
     </linearGradient>
 
     <linearGradient id="botGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -45,7 +45,7 @@
     </filter>
 
     <filter id="shadow3d" x="-20%" y="-20%" width="150%" height="150%">
-      <feDropShadow dx="0" dy="24" stdDeviation="20" flood-color="#000000" flood-opacity="0.45" />
+      <feDropShadow dx="0" dy="24" stdDeviation="20" flood-color="#000000" flood-opacity="0.5" />
     </filter>
   </defs>
 
@@ -58,18 +58,14 @@
     <path d="M200 350 L600 540 L1000 350 L600 160 Z" fill="none" stroke="#3873C4" stroke-width="1.2" />
     <path d="M300 350 L600 490 L900 350 L600 210 Z" fill="none" stroke="#3873C4" stroke-width="1.2" />
     <path d="M400 350 L600 440 L800 350 L600 260 Z" fill="none" stroke="#3873C4" stroke-width="1.2" />
-    <!-- Grid Lines -->
     <line x1="600" y1="110" x2="600" y2="590" stroke="#3873C4" stroke-width="1" stroke-dasharray="4 4" />
     <line x1="100" y1="350" x2="1100" y2="350" stroke="#3873C4" stroke-width="1" stroke-dasharray="4 4" />
   </g>
 
   <!-- 3D Floating Isometric Platform Base -->
   <g filter="url(#shadow3d)">
-    <!-- Platform Top -->
     <polygon points="600,240 880,380 600,520 320,380" fill="url(#glassCard)" stroke="#55A5FF" stroke-width="2" stroke-opacity="0.4" />
-    <!-- Platform Left Depth -->
     <polygon points="320,380 600,520 600,545 320,405" fill="#002D57" fill-opacity="0.8" stroke="#3873C4" stroke-opacity="0.3" />
-    <!-- Platform Right Depth -->
     <polygon points="600,520 880,380 880,405 600,545" fill="#001F3F" fill-opacity="0.9" stroke="#3873C4" stroke-opacity="0.3" />
   </g>
 
@@ -88,110 +84,90 @@
     <line x1="720" y1="280" x2="680" y2="340" stroke="#4ECCA3" stroke-width="2" stroke-opacity="0.5" />
   </g>
 
-  <!-- 3D CENTRAL DEFENSE SHIELD (Material Design 3 Elevated Shield) -->
+  <!-- 3D CENTRAL DEFENSE SHIELD & TOPENG ICON -->
   <g filter="url(#shadow3d)">
     <!-- Outer Shield Ambient Aura -->
-    <path d="M600 130 Q740 170 730 330 Q710 440 600 490 Q490 440 470 330 Q460 170 600 130 Z"
+    <path d="M600 120 Q740 160 730 330 Q710 445 600 495 Q490 445 470 330 Q460 160 600 120 Z"
           fill="none" stroke="#55A5FF" stroke-width="4" stroke-opacity="0.6" filter="url(#glow)" />
 
     <!-- 3D Shield Glass Body -->
-    <path d="M600 140 Q725 180 715 325 Q695 425 600 475 Q505 425 485 325 Q475 180 600 140 Z"
+    <path d="M600 130 Q725 170 715 325 Q695 430 600 480 Q505 430 485 325 Q475 170 600 130 Z"
           fill="url(#shieldGrad)" stroke="#A0C9FF" stroke-width="3" stroke-opacity="0.8" />
 
-    <!-- Shield 3D Specular Highlight (Left Curved Bevel) -->
-    <path d="M600 145 Q515 185 500 320 Q515 415 600 465 Q530 405 520 315 Q530 195 600 145 Z"
+    <!-- Shield 3D Specular Highlight -->
+    <path d="M600 135 Q515 175 500 320 Q515 420 600 470 Q530 410 520 315 Q530 185 600 135 Z"
           fill="#FFFFFF" fill-opacity="0.25" />
 
-    <!-- Central AI Core / Radar Icon -->
-    <circle cx="600" cy="305" r="48" fill="#001F3F" stroke="#55A5FF" stroke-width="2.5" filter="url(#softGlow)" />
-    <circle cx="600" cy="305" r="32" fill="#00477B" stroke="#A0C9FF" stroke-width="2" />
-    <circle cx="600" cy="305" r="14" fill="#FFFFFF" filter="url(#glow)" />
+    <!-- 3D THEATER MASK (TOPENG) ICON IN CENTER -->
+    <g transform="translate(600, 295)">
+      <!-- Mask Base -->
+      <path d="M -45,-35 C -45,-35 0,-45 45,-35 C 50,5 35,45 0,55 C -35,45 -50,5 -45,-35 Z"
+            fill="url(#maskGrad)" stroke="#FFFFFF" stroke-width="2" filter="url(#softGlow)" />
+      <!-- Left Eye Hole (Organic / Exposed) -->
+      <path d="M -30,-12 C -20,-22 -10,-12 -20,-2 C -30,-2 -35,-8 -30,-12 Z" fill="#001D36" stroke="#3873C4" stroke-width="1.5" />
+      <!-- Right Eye Hole (Holographic Scan Lens) -->
+      <path d="M 30,-12 C 20,-22 10,-12 20,-2 C 30,-2 35,-8 30,-12 Z" fill="#FF5449" stroke="#FFB4AB" stroke-width="1.5" filter="url(#softGlow)" />
+      <!-- Subtle Smile Curve -->
+      <path d="M -18,22 Q 0,34 18,22" fill="none" stroke="#1E293B" stroke-width="3" stroke-linecap="round" />
+      <!-- Forensic Scan Line Cutting Through Mask -->
+      <line x1="-55" y1="2" x2="55" y2="2" stroke="#55A5FF" stroke-width="2" stroke-dasharray="4 2" filter="url(#glow)" />
+    </g>
 
-    <!-- 3D Core Crosshair Rays -->
-    <line x1="600" y1="245" x2="600" y2="365" stroke="#A0C9FF" stroke-width="2.5" stroke-opacity="0.7" stroke-dasharray="3 3" />
-    <line x1="540" y1="305" x2="660" y2="305" stroke="#A0C9FF" stroke-width="2.5" stroke-opacity="0.7" stroke-dasharray="3 3" />
+    <!-- TOPENG Typographic Brand on Shield Base -->
+    <rect x="525" y="380" width="150" height="32" rx="16" fill="#001F3F" stroke="#55A5FF" stroke-width="1.5" />
+    <text x="600" y="401" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="900" letter-spacing="2.5" fill="#D1E4FF" text-anchor="middle">🎭 TOPENG</text>
   </g>
 
-  <!-- 3D FLOATING NODES (Bot Clusters vs Organic) -->
-  <!-- Bot Swarm Nodes (Red Warning) -->
+  <!-- 3D FLOATING NODES -->
   <g filter="url(#shadow3d)">
-    <!-- Node 1 -->
+    <!-- Bot 1 -->
     <circle cx="390" cy="310" r="22" fill="url(#botGrad)" filter="url(#softGlow)" />
-    <circle cx="390" cy="310" r="14" fill="#BA1A1A" />
     <path d="M384 304 L396 316 M396 304 L384 316" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" />
 
-    <!-- Node 2 -->
+    <!-- Bot 2 -->
     <circle cx="480" cy="270" r="19" fill="url(#botGrad)" filter="url(#softGlow)" />
-    <circle cx="480" cy="270" r="12" fill="#BA1A1A" />
 
-    <!-- Node 3 -->
+    <!-- Bot 3: Flagged Pseudo Account -->
     <circle cx="430" cy="200" r="24" fill="url(#botGrad)" filter="url(#glow)" />
-    <circle cx="430" cy="200" r="15" fill="#780000" />
-    <text x="430" y="204" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="900" fill="#FFFFFF" text-anchor="middle">BOT</text>
+    <text x="430" y="204" font-family="-apple-system, sans-serif" font-size="10" font-weight="900" fill="#FFFFFF" text-anchor="middle">PSEUDO</text>
 
-    <!-- Node 4 -->
-    <circle cx="520" cy="170" r="16" fill="url(#botGrad)" filter="url(#softGlow)" />
-  </g>
-
-  <!-- Organic Account Nodes (Green Verified) -->
-  <g filter="url(#shadow3d)">
-    <!-- Node A -->
+    <!-- Organic 1 -->
     <circle cx="720" cy="280" r="22" fill="url(#organicGrad)" filter="url(#softGlow)" />
     <path d="M713 280 L718 285 L728 274" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
 
-    <!-- Node B -->
+    <!-- Organic 2 -->
     <circle cx="800" cy="230" r="24" fill="url(#organicGrad)" filter="url(#glow)" />
-    <circle cx="800" cy="230" r="15" fill="#006C47" />
     <path d="M793 230 L798 235 L808 224" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-
-    <!-- Node C -->
-    <circle cx="760" cy="160" r="18" fill="url(#organicGrad)" filter="url(#softGlow)" />
-
-    <!-- Node D -->
-    <circle cx="680" cy="340" r="16" fill="url(#organicGrad)" filter="url(#softGlow)" />
   </g>
 
-  <!-- 3D MATERIAL DESIGN 3 FLOATING CARDS (Glassmorphism & Tonal Surface) -->
-  <!-- Floating Card Left: Bot Detection Analysis -->
-  <g filter="url(#shadow3d)" transform="translate(140, 160)">
-    <!-- M3 Rounded Card Container -->
-    <rect width="230" height="95" rx="16" fill="#1C2541" fill-opacity="0.85" stroke="#FF6B6B" stroke-width="1.5" stroke-opacity="0.6" />
+  <!-- 3D MATERIAL DESIGN 3 FLOATING CARDS -->
+  <!-- Floating Card Left: Pseudo Engagement Warning -->
+  <g filter="url(#shadow3d)" transform="translate(130, 150)">
+    <rect width="245" height="100" rx="18" fill="#141E33" fill-opacity="0.9" stroke="#FF6B6B" stroke-width="1.5" stroke-opacity="0.7" />
     <circle cx="34" cy="36" r="14" fill="#BA1A1A" fill-opacity="0.3" />
     <text x="34" y="41" font-family="'Segoe UI', Roboto, sans-serif" font-size="16" text-anchor="middle">⚠️</text>
-    <text x="58" y="32" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#FFB4AB">Klaster Terkoordinasi</text>
-    <text x="58" y="48" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" fill="#D1E4FF" opacity="0.8">Co-Retweet Semrawut</text>
-    <!-- Progress Indicator Bar -->
-    <rect x="22" y="66" width="186" height="6" rx="3" fill="#3B4861" />
-    <rect x="22" y="66" width="155" height="6" rx="3" fill="#FF5449" />
-    <text x="186" y="82" font-family="'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" fill="#FFB4AB" text-anchor="end">Skor: 0.88</text>
+    <text x="58" y="32" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#FFB4AB">Pseudo-ENGagement</text>
+    <text x="58" y="48" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" fill="#D1E4FF" opacity="0.8">Amplifikasi Terkoordinasi</text>
+    <rect x="22" y="68" width="200" height="6" rx="3" fill="#3B4861" />
+    <rect x="22" y="68" width="170" height="6" rx="3" fill="#FF5449" />
+    <text x="200" y="86" font-family="'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" fill="#FFB4AB" text-anchor="end">Klaster CIB: Aktif</text>
   </g>
 
-  <!-- Floating Card Right: Verified Accuracy Metrics -->
-  <g filter="url(#shadow3d)" transform="translate(830, 290)">
-    <!-- M3 Rounded Card Container -->
-    <rect width="230" height="95" rx="16" fill="#1C2541" fill-opacity="0.85" stroke="#4ECCA3" stroke-width="1.5" stroke-opacity="0.6" />
+  <!-- Floating Card Right: Verifikasi Wajah Asli -->
+  <g filter="url(#shadow3d)" transform="translate(825, 280)">
+    <rect width="245" height="100" rx="18" fill="#141E33" fill-opacity="0.9" stroke="#4ECCA3" stroke-width="1.5" stroke-opacity="0.7" />
     <circle cx="34" cy="36" r="14" fill="#005234" fill-opacity="0.4" />
-    <text x="34" y="41" font-family="'Segoe UI', Roboto, sans-serif" font-size="16" text-anchor="middle">🛡️</text>
-    <text x="58" y="32" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#6CDBAC">Explainable AI (SHAP)</text>
-    <text x="58" y="48" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" fill="#D1E4FF" opacity="0.8">Transparan & Terukur</text>
-    <!-- Progress Indicator Bar -->
-    <rect x="22" y="66" width="186" height="6" rx="3" fill="#3B4861" />
-    <rect x="22" y="66" width="168" height="6" rx="3" fill="#4ECCA3" />
-    <text x="186" y="82" font-family="'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" fill="#6CDBAC" text-anchor="end">F1-Score: ≥ 0.80</text>
+    <text x="34" y="41" font-family="'Segoe UI', Roboto, sans-serif" font-size="16" text-anchor="middle">👁️</text>
+    <text x="58" y="32" font-family="'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#6CDBAC">Deteksi Pola Organik</text>
+    <text x="58" y="48" font-family="'Segoe UI', Roboto, sans-serif" font-size="11" fill="#D1E4FF" opacity="0.8">Akun Bernurani &amp; Wajah Nyata</text>
+    <rect x="22" y="68" width="200" height="6" rx="3" fill="#3B4861" />
+    <rect x="22" y="68" width="180" height="6" rx="3" fill="#4ECCA3" />
+    <text x="200" y="86" font-family="'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" fill="#6CDBAC" text-anchor="end">Keaslian: Terverifikasi</text>
   </g>
 
-  <!-- Floating Card Bottom: Multi-Layer Multiplex -->
-  <g filter="url(#shadow3d)" transform="translate(485, 475)">
-    <rect width="230" height="58" rx="29" fill="#002D57" fill-opacity="0.9" stroke="#55A5FF" stroke-width="2" />
-    <circle cx="30" cy="29" r="16" fill="#0061A4" />
-    <text x="30" y="35" font-family="'Segoe UI', Roboto, sans-serif" font-size="16" text-anchor="middle">🕸️</text>
-    <text x="58" y="27" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="700" fill="#D1E4FF">Graf Koordinasi Multiplex</text>
-    <text x="58" y="43" font-family="'Segoe UI', Roboto, sans-serif" font-size="10" fill="#A0C9FF">4 Lapisan Sinyal · Leiden</text>
+  <!-- Floating Card Bottom: Tagline Persona -->
+  <g filter="url(#shadow3d)" transform="translate(425, 520)">
+    <rect width="350" height="46" rx="23" fill="#002D57" fill-opacity="0.95" stroke="#55A5FF" stroke-width="1.8" />
+    <text x="175" y="28" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600" fill="#D1E4FF" text-anchor="middle">"Seribu akun, berapa yang punya wajah?"</text>
   </g>
-
-  <!-- Floating Tech Particles -->
-  <circle cx="280" cy="120" r="3" fill="#55A5FF" opacity="0.6" filter="url(#softGlow)" />
-  <circle cx="320" cy="480" r="4" fill="#55A5FF" opacity="0.4" filter="url(#softGlow)" />
-  <circle cx="920" cy="140" r="3.5" fill="#4ECCA3" opacity="0.5" filter="url(#softGlow)" />
-  <circle cx="870" cy="460" r="3" fill="#FF6B6B" opacity="0.5" filter="url(#softGlow)" />
 </svg>
