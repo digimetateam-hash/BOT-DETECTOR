@@ -5,6 +5,7 @@ import hashlib
 import os
 from datetime import datetime
 from typing import Optional
+
 from dotenv import load_dotenv
 from sqlalchemy import (
     Boolean,
@@ -14,7 +15,6 @@ from sqlalchemy import (
     Float,
     ForeignKey,
     Integer,
-    Numeric,
     String,
     Text,
     create_engine,

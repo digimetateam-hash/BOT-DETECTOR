@@ -1,8 +1,8 @@
 """
 Konstruksi Graf Multiplex & Deteksi Komunitas Terkoordinasi (PRD Bagian 7, 11 & 13a)
 """
-from datetime import datetime
 from typing import Any, Dict, List, Set, Tuple
+
 import networkx as nx
 import numpy as np
 import pandas as pd
@@ -144,3 +144,56 @@ def detect_coordinated_clusters(
         cluster_id += 1
 
     return clusters
+
+
+def compute_actor_centrality_and_roles(G: nx.Graph) -> pd.DataFrame:
+    """
+    Menghitung metrik sentralitas (Degree, Betweenness, PageRank, Closeness)
+    dan memetakan tipologi peran komunikasi aktor (diadopsi dari ThisIsEconomy).
+    """
+    if G.number_of_nodes() == 0:
+        return pd.DataFrame(
+            columns=[
+                "author_username",
+                "total_degree",
+                "betweenness_centrality",
+                "pagerank",
+                "closeness_centrality",
+                "communication_role",
+            ]
+        )
+
+    tot_deg = dict(G.degree())
+    bet_cent = nx.betweenness_centrality(G, normalized=True)
+    cls_cent = nx.closeness_centrality(G)
+    try:
+        pr_cent = nx.pagerank(G, alpha=0.85)
+    except Exception:
+        pr_cent = {n: 0.0 for n in G.nodes()}
+
+    rows = []
+    for node in G.nodes():
+        deg = tot_deg.get(node, 0)
+        bw = bet_cent.get(node, 0.0)
+        pr = pr_cent.get(node, 0.0)
+        cls_val = cls_cent.get(node, 0.0)
+
+        if bw >= 0.05 or (deg >= 4 and bw >= 0.01):
+            role = "Opinion Broker (Jembatan Klaster)"
+        elif deg >= 3:
+            role = "Core Amplifier (Penggerak Klaster)"
+        elif deg >= 2:
+            role = "Secondary Amplifier"
+        else:
+            role = "Peripheral Account"
+
+        rows.append({
+            "author_username": node,
+            "total_degree": deg,
+            "betweenness_centrality": round(float(bw), 6),
+            "pagerank": round(float(pr), 6),
+            "closeness_centrality": round(float(cls_val), 6),
+            "communication_role": role,
+        })
+
+    return pd.DataFrame(rows)

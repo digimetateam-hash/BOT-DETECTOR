@@ -2,9 +2,9 @@
 Ekstraksi Fitur Profil, Aktivitas Waktu, dan Kemiripan Konten (PRD Bagian 7 & 13a)
 """
 import re
-from collections import Counter
 from datetime import datetime
 from typing import Any, Dict, List
+
 import numpy as np
 import pandas as pd
 from datasketch import MinHash, MinHashLSH

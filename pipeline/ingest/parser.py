@@ -3,9 +3,9 @@ Modul Ingest dan Parsing Data Media Sosial (NodeXL & CSV/XLSX)
 PRD Bagian 4 & 15a
 """
 import io
-import re
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple
+
 import numpy as np
 import pandas as pd
 
@@ -203,7 +203,6 @@ def generate_mock_mbg_corpus(n_posts: int = 350) -> pd.DataFrame:
     for cycle in range(5):
         burst_time = base_time + timedelta(hours=cycle * 12 + np.random.randint(1, 4))
         template = bot_templates[cycle % len(bot_templates)]
-        parent_id = f"lead_post_{cycle}"
 
         for bot_user in bot_cluster:
             # Jeda waktu sempit (5-30 detik) = perilaku koordinasi tinggi

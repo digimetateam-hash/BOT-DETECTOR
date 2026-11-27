@@ -2,10 +2,13 @@
 Mesin Skoring Deteksi Bot & Explainability SHAP (PRD Bagian 7 & 13a)
 """
 import json
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
+
 import numpy as np
 import pandas as pd
 from sklearn.metrics import cohen_kappa_score
+
+from pipeline.config_loader import load_config
 
 
 def calculate_bot_score_and_explain(
@@ -13,20 +16,23 @@ def calculate_bot_score_and_explain(
     thresholds: Optional[Dict[str, Any]] = None,
 ) -> pd.DataFrame:
     """
-    Menghitung skor bot (0.0 - 1.0) dan mengekstrak Top-5 fitur pemicu (SHAP / feature contribution).
-    Aturan Kategori (PRD 13a R-D1 & R-D2):
-      - Skor < 0.40        : organik
-      - Skor 0.40 - 0.69   : mencurigakan
-      - Skor >= 0.70       : mirip_bot
-      - Total posting < 5  : Tidak diberi kategori (hanya skor)
+    Menghitung skor indikasi bot (0.0 - 1.0) dan mengekstrak Top-5 fitur pemicu (SHAP / feature contribution).
+    Aturan Kategori dibaca dari config.yaml (PRD 13a R-D1 & R-D2):
+      - Skor < organik_max       : organik
+      - Skor mencurigakan_min..max : mencurigakan
+      - Skor >= mirip_bot_min    : mirip_bot
+      - Total posting < min_posts : Tidak diberi kategori (hanya skor)
     """
     if thresholds is None:
+        cfg = load_config()
+        det_cfg = cfg.get("detection", {})
+        sc_cfg = det_cfg.get("score_thresholds", {})
         thresholds = {
-            "organik_max": 0.40,
-            "mencurigakan_min": 0.40,
-            "mencurigakan_max": 0.69,
-            "mirip_bot_min": 0.70,
-            "min_posts": 5,
+            "organik_max": sc_cfg.get("organik_max", 0.40),
+            "mencurigakan_min": sc_cfg.get("mencurigakan_min", 0.40),
+            "mencurigakan_max": sc_cfg.get("mencurigakan_max", 0.69),
+            "mirip_bot_min": sc_cfg.get("mirip_bot_min", 0.70),
+            "min_posts": det_cfg.get("min_posts_for_categorization", 5),
         }
 
     results = []

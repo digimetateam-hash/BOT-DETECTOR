@@ -7,6 +7,7 @@ import json
 import os
 import sys
 from datetime import datetime
+
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -16,7 +17,11 @@ import streamlit as st
 # Pastikan direktori root masuk ke sys.path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from db.schema import hash_handle, init_database
+from db.schema import hash_handle
+from pipeline.features.anomaly import (
+    compute_behavioral_anomaly_scores,
+    detect_temporal_spikes,
+)
 from pipeline.features.extractor import (
     detect_text_duplicates_minhash,
     extract_account_features,
@@ -28,6 +33,7 @@ from pipeline.models.detector import (
 )
 from pipeline.network.graph import (
     build_multiplex_coordination_graph,
+    compute_actor_centrality_and_roles,
     detect_coordinated_clusters,
 )
 
@@ -141,24 +147,32 @@ if "manual_labels" not in st.session_state:
 
 
 def run_full_pipeline(df_posts: pd.DataFrame):
-    """Menjalankan seluruh pipeline analisis secara terpadu."""
+    """Menjalankan seluruh pipeline analisis unsupervised hybrid secara terpadu."""
     with st.spinner("Mengekstraksi fitur profil, aktivitas, dan konten..."):
         df_features = extract_account_features(df_posts)
+
+    with st.spinner("Menghitung Behavioral Anomaly Score (Isolation Forest) & Temporal Spike (Z-Score)..."):
+        df_anomaly = compute_behavioral_anomaly_scores(df_features, random_state=42)
+        df_spikes = detect_temporal_spikes(df_posts)
 
     with st.spinner("Mendeteksi duplikasi teks via MinHash/LSH..."):
         dups = detect_text_duplicates_minhash(df_posts, threshold=0.85)
 
-    with st.spinner("Menghitung skor bot dan atribusi fitur SHAP..."):
+    with st.spinner("Menghitung skor indikasi bot dan atribusi fitur SHAP..."):
         df_scores = calculate_bot_score_and_explain(df_features)
+        df_scores = df_scores.merge(df_anomaly, on="author_username", how="left")
         df_scores["handle_hash"] = df_scores["author_username"].apply(lambda u: hash_handle(u)[:16] + "...")
         df_scores["full_hash"] = df_scores["author_username"].apply(hash_handle)
 
-    with st.spinner("Membangun graf multiplex dan deteksi klaster..."):
+    with st.spinner("Membangun graf multiplex, sentralitas aktor, dan deteksi klaster..."):
         G = build_multiplex_coordination_graph(df_posts, dups)
         clusters = detect_coordinated_clusters(G, min_cluster_size=4)
+        df_centrality = compute_actor_centrality_and_roles(G)
 
     st.session_state["df_postings"] = df_posts
     st.session_state["df_scores"] = df_scores
+    st.session_state["df_spikes"] = df_spikes
+    st.session_state["df_centrality"] = df_centrality
     st.session_state["duplicates"] = dups
     st.session_state["clusters"] = clusters
     st.session_state["graph"] = G
@@ -421,7 +435,10 @@ elif nav_choice == "3. ⚠️ Daftar Akun Berisiko":
 
         st.write(f"Menampilkan **{len(filtered)}** akun dari total {len(df_scores)} akun.")
 
-        display_df = filtered[["handle_hash", "skor", "kategori", "total_posts"]].copy()
+        display_cols = ["handle_hash", "skor", "kategori", "total_posts"]
+        if "anomaly_score" in filtered.columns:
+            display_cols.extend(["anomaly_score", "is_anomaly_outlier"])
+        display_df = filtered[display_cols].copy()
         display_df = display_df.sort_values("skor", ascending=False).reset_index(drop=True)
         st.dataframe(display_df, use_container_width=True)
 
@@ -659,13 +676,34 @@ elif nav_choice == "7. 📑 Laporan & Ekspor":
         - **Klaster Koordinasi**: {len(st.session_state.get('clusters', [])):,} kelompok aktif
         """)
 
-        export_df = df_scores[["handle_hash", "full_hash", "skor", "kategori", "total_posts", "top_features"]].copy()
+        export_cols = ["handle_hash", "full_hash", "skor", "kategori", "total_posts", "top_features"]
+        if "anomaly_score" in df_scores.columns:
+            export_cols.extend(["anomaly_score", "is_anomaly_outlier"])
+        export_df = df_scores[export_cols].copy()
         csv_data = export_df.to_csv(index=False).encode("utf-8")
 
-        st.download_button(
-            label="📥 Unduh Hasil Penilaian Akun (CSV)",
-            data=csv_data,
-            file_name=f"hasil_deteksi_bot_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
-            mime="text/csv",
-            type="primary",
-        )
+        import io
+        excel_buf = io.BytesIO()
+        with pd.ExcelWriter(excel_buf, engine="openpyxl") as writer:
+            export_df.to_excel(writer, index=False, sheet_name="Skor_Akun")
+            if st.session_state.get("df_spikes") is not None:
+                st.session_state["df_spikes"].to_excel(writer, index=False, sheet_name="Temporal_Spikes")
+
+        dl1, dl2 = st.columns(2)
+        with dl1:
+            st.download_button(
+                label="📥 Unduh Hasil Penilaian Akun (CSV)",
+                data=csv_data,
+                file_name=f"hasil_deteksi_bot_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+                mime="text/csv",
+                type="primary",
+                use_container_width=True,
+            )
+        with dl2:
+            st.download_button(
+                label="📊 Unduh Laporan Lengkap (Excel .xlsx)",
+                data=excel_buf.getvalue(),
+                file_name=f"laporan_topeng_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                use_container_width=True,
+            )
